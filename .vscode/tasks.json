@@ -1,0 +1,35 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Gradle: Build Debug APK",
+      "type": "shell",
+      "command": "./gradlew assembleDebug",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Gradle: Install & Run on Connected Device / Emulator",
+      "type": "shell",
+      "command": "./gradlew installDebug && adb shell am start -n com.aistudio.desiturborush.kxmpzq/com.example.MainActivity",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Gradle: Run Unit Tests",
+      "type": "shell",
+      "command": "./gradlew :app:testDebugUnitTest",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Gradle: Clean Project",
+      "type": "shell",
+      "command": "./gradlew clean",
+      "problemMatcher": []
+    }
+  ]
+}
