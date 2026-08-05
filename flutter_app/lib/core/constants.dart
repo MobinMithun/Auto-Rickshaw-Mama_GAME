@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class Constants {
   static const double virtualWidth = 180;
   static const double virtualHeight = 320;

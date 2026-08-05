@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import '../core/constants.dart';
 import '../core/palette.dart';
 import '../entities/game_entities.dart';
@@ -487,7 +486,7 @@ class GameEngine extends ChangeNotifier {
       final minX = Constants.kerbLeftX + 10;
       final maxX = Constants.kerbRightX - 10;
       coin.x = minX + Random().nextDouble() * (maxX - minX);
-      coin.y = -((i * 15) + 10);
+      coin.y = -((i * 15) + 10).toDouble();
     }
   }
 

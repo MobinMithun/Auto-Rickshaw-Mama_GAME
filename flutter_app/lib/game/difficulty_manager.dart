@@ -1,5 +1,3 @@
-import '../core/constants.dart';
-
 class DifficultyManager {
   DifficultyTier getTierForTime(double survivalTimeSec) {
     if (survivalTimeSec < 20) {

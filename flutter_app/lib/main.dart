@@ -13,14 +13,15 @@ class DesiTurboRushApp extends StatelessWidget {
     return MaterialApp(
       title: 'Desi Turbo Rush',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: const Color(0xFF0D0B1F),
+      theme: ThemeData.from(
         colorScheme: const ColorScheme.dark(
           primary: Color(0xFFFFB03B),
           secondary: Color(0xFF2FA15A),
           surface: Color(0xFF1C1A2E),
         ),
         useMaterial3: true,
+      ).copyWith(
+        scaffoldBackgroundColor: const Color(0xFF0D0B1F),
       ),
       home: const MainGameContainer(),
     );

@@ -14,7 +14,6 @@ class AudioDirector {
 
   final AudioPlayer _bgmPlayer = AudioPlayer();
   final AudioPlayer _sfxPlayer = AudioPlayer();
-  bool _bgmPlaying = false;
 
   AudioDirector() {
     _startBgmLoop();
@@ -24,7 +23,6 @@ class AudioDirector {
     try {
       final buffer = _generateBgmBuffer();
       await _bgmPlayer.play(BytesSource(buffer));
-      _bgmPlaying = true;
     } catch (e) {
       // ignore
     }

@@ -1,6 +1,5 @@
 import 'dart:math';
 import '../core/constants.dart';
-import '../entities/game_entities.dart';
 
 class SpawnDirector {
   final Random rng = Random();

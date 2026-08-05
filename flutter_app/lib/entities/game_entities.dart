@@ -1,4 +1,4 @@
-import '../core/palette.dart';
+import '../core/constants.dart';
 
 class HitboxRect {
   final double x;

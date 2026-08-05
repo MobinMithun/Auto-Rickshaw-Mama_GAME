@@ -4,7 +4,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import '../core/constants.dart';
 import '../core/palette.dart';
-import '../entities/game_entities.dart';
 import '../game/game_engine.dart';
 import '../sprites/pixel_sprite_renderer.dart';
 
@@ -301,42 +300,37 @@ class _GamePainter extends CustomPainter {
     for (final coin in engine.pools.coinPool) {
       if (!coin.isActive || coin.isCollected) continue;
       final sprite = PixelSpriteRenderer.getCoinSprite(frameIndex);
-      final dst = Rect.fromLTWH(
         coin.x * scale,
         coin.y * scale,
         8 * scale,
         8 * scale,
       );
-      canvas.drawImageRect(sprite, Rect.fromLTWH(0, 0, 8, 8), dst, Paint());
+      canvas.drawPicture(sprite);
     }
 
     for (final pup in engine.pools.powerUpPool) {
       if (!pup.isActive) continue;
       final sprite = PixelSpriteRenderer.getPowerUpSprite(pup.type.name.toLowerCase(), frameIndex);
-      final dst = Rect.fromLTWH(pup.x * scale, pup.y * scale, 16 * scale, 16 * scale);
-      canvas.drawImageRect(sprite, Rect.fromLTWH(0, 0, 16, 16), dst, Paint());
+      canvas.drawPicture(sprite);
     }
 
     for (final obs in engine.pools.obstaclePool) {
       if (!obs.isActive) continue;
       final sprite = PixelSpriteRenderer.getObstacleSprite(obs.type, frameIndex);
-      final dst = Rect.fromLTWH(obs.x * scale, obs.y * scale, obs.width * scale, obs.height * scale);
-      canvas.drawImageRect(sprite, Rect.fromLTWH(0, 0, 16, 16), dst, Paint());
+      canvas.drawPicture(sprite);
     }
 
     for (final ped in engine.pools.pedestrianPool) {
       if (!ped.isActive) continue;
       final sprite = PixelSpriteRenderer.getPedestrianSprite(frameIndex, ped.isDodging);
       final drawX = ped.isDodging ? ped.x + ped.dodgeOffset : ped.x;
-      final dst = Rect.fromLTWH(drawX * scale, ped.y * scale, 16 * scale, 24 * scale);
-      canvas.drawImageRect(sprite, Rect.fromLTWH(0, 0, 16, 24), dst, Paint());
+      canvas.drawPicture(sprite);
     }
 
     for (final pass in engine.pools.passengerPool) {
       if (!pass.isActive) continue;
       final sprite = PixelSpriteRenderer.getPassengerSprite(pass.typeIndex, frameIndex);
-      final dst = Rect.fromLTWH(pass.x * scale, pass.y * scale, 16 * scale, 24 * scale);
-      canvas.drawImageRect(sprite, Rect.fromLTWH(0, 0, 16, 24), dst, Paint());
+      canvas.drawPicture(sprite);
     }
 
     final player = engine.player;
@@ -360,13 +354,12 @@ class _GamePainter extends CustomPainter {
     final isBlinking = player.invincibleTimerSec > 0 && ((player.invincibleTimerSec * 15).toInt() % 2 == 0);
     if (!isBlinking) {
       final rickshawSprite = PixelSpriteRenderer.getRickshawFrame(frameIndex, player.isTurbo, leanDir);
-      final rDst = Rect.fromLTWH(
         player.x * scale,
         player.y * scale,
         Constants.rickshawWidth * scale,
         Constants.rickshawHeight * scale,
       );
-      canvas.drawImageRect(rickshawSprite, Rect.fromLTWH(0, 0, 32, 40), rDst, Paint());
+      canvas.drawPicture(rickshawSprite);
     }
 
     if (player.isShielded) {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../core/palette.dart';
-import '../game/game_engine.dart';
 import '../sprites/pixel_sprite_renderer.dart';
 
 class HomeScreen extends StatefulWidget {
