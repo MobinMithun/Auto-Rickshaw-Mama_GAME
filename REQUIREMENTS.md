@@ -1,6 +1,6 @@
 # macOS & VS Code Development Requirements
 
-This document details all system requirements, software prerequisites, VS Code extensions, environment variables, and execution steps needed to run and build **Desi Turbo Rush** in **VS Code on macOS**.
+This document details all system requirements, software prerequisites, VS Code extensions, environment variables, and execution steps needed to run and build **Rickshaw Mama Rush** in **VS Code on macOS**.
 
 ---
 

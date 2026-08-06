@@ -69,9 +69,9 @@ fun HomeScreen(
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
-                        text = "DESI TURBO",
+                        text = "RICKSHAW MAMA",
                         color = gold,
-                        fontSize = 28.sp,
+                        fontSize = 24.sp,
                         fontWeight = FontWeight.Black,
                         fontFamily = FontFamily.Monospace,
                         letterSpacing = 2.sp
@@ -79,7 +79,7 @@ fun HomeScreen(
                     Text(
                         text = "R U S H",
                         color = paper,
-                        fontSize = 24.sp,
+                        fontSize = 22.sp,
                         fontWeight = FontWeight.Bold,
                         fontFamily = FontFamily.Monospace,
                         letterSpacing = 4.sp

@@ -22,6 +22,6 @@ dependencyResolutionManagement {
   }
 }
 
-rootProject.name = "Desi Turbo Rush"
+rootProject.name = "Rickshaw Mama Rush"
 
 include(":app")

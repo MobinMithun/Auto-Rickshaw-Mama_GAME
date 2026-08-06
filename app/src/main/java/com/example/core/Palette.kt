@@ -3,7 +3,7 @@ package com.example.core
 import androidx.compose.ui.graphics.Color
 
 /**
- * Master 32-Color Locked Palette for Desi Turbo Rush.
+ * Master 32-Color Locked Palette for Rickshaw Mama Rush.
  * No color outside this 32-color specification reaches the screen.
  */
 object Palette {

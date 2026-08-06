@@ -1,4 +1,4 @@
-# Desi Turbo Rush 🛺
+# Rickshaw Mama Rush 🛺
 
 A 2D retro pixel-art arcade rickshaw runner game built natively with Android Kotlin & Jetpack Compose.
 
