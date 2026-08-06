@@ -27,12 +27,24 @@ class ObjectPools {
   PowerUpEntity? obtainPowerUp() => powerUpPool.firstWhereOrNull((e) => !e.isActive);
 
   void resetAll() {
-    for (final e in obstaclePool) e.isActive = false;
-    for (final e in pedestrianPool) e.isActive = false;
+    for (final e in obstaclePool) {
+      e.isActive = false;
+    }
+    for (final e in pedestrianPool) {
+      e.isActive = false;
+    }
     for (final e in coinPool) { e.isActive = false; e.isCollected = false; }
-    for (final e in particlePool) e.isActive = false;
-    for (final e in floatingTextPool) e.isActive = false;
-    for (final e in passengerPool) e.isActive = false;
-    for (final e in powerUpPool) e.isActive = false;
+    for (final e in particlePool) {
+      e.isActive = false;
+    }
+    for (final e in floatingTextPool) {
+      e.isActive = false;
+    }
+    for (final e in passengerPool) {
+      e.isActive = false;
+    }
+    for (final e in powerUpPool) {
+      e.isActive = false;
+    }
   }
 }

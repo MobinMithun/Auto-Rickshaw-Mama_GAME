@@ -227,7 +227,7 @@ class _GamePainter extends CustomPainter {
     final deviceH = size.height;
 
     final scaleFloat = (min(deviceW / Constants.virtualWidth, deviceH / Constants.virtualHeight)).floorToDouble().clamp(1.0, double.infinity);
-    final scale = scaleFloat.toInt();
+    final scale = scaleFloat;
     final virtualDrawW = Constants.virtualWidth * scale;
     final virtualDrawH = Constants.virtualHeight * scale;
     final letterboxX = ((deviceW - virtualDrawW) / 2).toInt();
@@ -249,7 +249,7 @@ class _GamePainter extends CustomPainter {
     canvas.restore();
   }
 
-  void _drawParallaxBackground(Canvas canvas, int scale) {
+  void _drawParallaxBackground(Canvas canvas, double scale) {
     final distance = engine.distanceMeters;
     final skyColor = engine.currentZone == GameZone.nightStreet
         ? Palette.voidBlack
@@ -272,7 +272,7 @@ class _GamePainter extends CustomPainter {
     }
   }
 
-  void _drawRoadAndKerbs(Canvas canvas, int scale) {
+  void _drawRoadAndKerbs(Canvas canvas, double scale) {
     final scrollY = ((engine.distanceMeters * 6) % 16).toInt();
     final kerbPaint = Paint()..color = Palette.stone;
     canvas.drawRect(Rect.fromLTWH(0, 0, Constants.kerbLeftX * scale, Constants.virtualHeight * scale), kerbPaint);
@@ -294,43 +294,58 @@ class _GamePainter extends CustomPainter {
     }
   }
 
-  void _drawEntities(Canvas canvas, int scale) {
+  void _drawEntities(Canvas canvas, double scale) {
     final frameIndex = (frameTick ~/ 6) % 4;
 
     for (final coin in engine.pools.coinPool) {
       if (!coin.isActive || coin.isCollected) continue;
       final sprite = PixelSpriteRenderer.getCoinSprite(frameIndex);
-        coin.x * scale,
-        coin.y * scale,
-        8 * scale,
-        8 * scale,
-      );
+      canvas.save();
+      canvas.translate(coin.x * scale, coin.y * scale);
+      canvas.scale(scale.toDouble(), scale.toDouble());
       canvas.drawPicture(sprite);
+      canvas.restore();
     }
 
     for (final pup in engine.pools.powerUpPool) {
       if (!pup.isActive) continue;
       final sprite = PixelSpriteRenderer.getPowerUpSprite(pup.type.name.toLowerCase(), frameIndex);
+      canvas.save();
+      canvas.translate(pup.x * scale, pup.y * scale);
+      canvas.scale(scale.toDouble(), scale.toDouble());
       canvas.drawPicture(sprite);
+      canvas.restore();
     }
 
     for (final obs in engine.pools.obstaclePool) {
       if (!obs.isActive) continue;
       final sprite = PixelSpriteRenderer.getObstacleSprite(obs.type, frameIndex);
+      canvas.save();
+      canvas.translate(obs.x * scale, obs.y * scale);
+      canvas.scale(scale.toDouble(), scale.toDouble());
       canvas.drawPicture(sprite);
+      canvas.restore();
     }
 
     for (final ped in engine.pools.pedestrianPool) {
       if (!ped.isActive) continue;
       final sprite = PixelSpriteRenderer.getPedestrianSprite(frameIndex, ped.isDodging);
       final drawX = ped.isDodging ? ped.x + ped.dodgeOffset : ped.x;
+      canvas.save();
+      canvas.translate(drawX * scale, ped.y * scale);
+      canvas.scale(scale.toDouble(), scale.toDouble());
       canvas.drawPicture(sprite);
+      canvas.restore();
     }
 
     for (final pass in engine.pools.passengerPool) {
       if (!pass.isActive) continue;
       final sprite = PixelSpriteRenderer.getPassengerSprite(pass.typeIndex, frameIndex);
+      canvas.save();
+      canvas.translate(pass.x * scale, pass.y * scale);
+      canvas.scale(scale.toDouble(), scale.toDouble());
       canvas.drawPicture(sprite);
+      canvas.restore();
     }
 
     final player = engine.player;
@@ -354,12 +369,11 @@ class _GamePainter extends CustomPainter {
     final isBlinking = player.invincibleTimerSec > 0 && ((player.invincibleTimerSec * 15).toInt() % 2 == 0);
     if (!isBlinking) {
       final rickshawSprite = PixelSpriteRenderer.getRickshawFrame(frameIndex, player.isTurbo, leanDir);
-        player.x * scale,
-        player.y * scale,
-        Constants.rickshawWidth * scale,
-        Constants.rickshawHeight * scale,
-      );
+      canvas.save();
+      canvas.translate(player.x * scale, player.y * scale);
+      canvas.scale(scale.toDouble(), scale.toDouble());
       canvas.drawPicture(rickshawSprite);
+      canvas.restore();
     }
 
     if (player.isShielded) {
@@ -389,7 +403,7 @@ class _GamePainter extends CustomPainter {
     }
   }
 
-  void _drawWeatherAndAtmosphere(Canvas canvas, int scale) {
+  void _drawWeatherAndAtmosphere(Canvas canvas, double scale) {
     switch (engine.currentZone) {
       case GameZone.rainyRoad:
         final rainPaint = Paint()..color = Palette.ash;
@@ -419,7 +433,7 @@ class _GamePainter extends CustomPainter {
     }
   }
 
-  void _drawHud(Canvas canvas, int scale) {
+  void _drawHud(Canvas canvas, double scale) {
     final inkPaint = Paint()..color = Palette.ink;
     canvas.drawRect(Rect.fromLTWH(0, 0, Constants.virtualWidth * scale, 24 * scale), inkPaint);
 

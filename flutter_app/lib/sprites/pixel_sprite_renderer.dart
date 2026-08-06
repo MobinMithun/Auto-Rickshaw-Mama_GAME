@@ -1,15 +1,24 @@
 import 'dart:ui' as ui;
 import '../core/palette.dart';
 
-class PixelSpriteRenderer {
-  static final Map<String, ui.Picture> _bitmapCache = {};
-  static final Paint _paint = Paint()..isAntiAlias = false..filterQuality = ui.FilterQuality.none;
+class _SpriteInfo {
+  final ui.Picture picture;
+  final int width;
+  final int height;
 
-  static ui.Picture createPixelBitmap(int width, int height, void Function(ui.Canvas) drawBlock) {
+  const _SpriteInfo(this.picture, this.width, this.height);
+}
+
+class PixelSpriteRenderer {
+  static final Map<String, _SpriteInfo> _bitmapCache = {};
+  static final ui.Paint _paint = ui.Paint()..isAntiAlias = false..filterQuality = ui.FilterQuality.none;
+
+  static _SpriteInfo createPixelBitmap(int width, int height, void Function(ui.Canvas) drawBlock) {
     final recorder = ui.PictureRecorder();
     final canvas = ui.Canvas(recorder, ui.Rect.fromLTWH(0, 0, width.toDouble(), height.toDouble()));
     drawBlock(canvas);
-    return recorder.endRecording();
+    final picture = recorder.endRecording();
+    return _SpriteInfo(picture, width, height);
   }
 
   static void drawPixel(ui.Canvas canvas, int x, int y, int colorArgb) {
@@ -30,16 +39,16 @@ class PixelSpriteRenderer {
     canvas.drawRect(ui.Rect.fromLTWH((left + width - 1).toDouble(), top.toDouble(), 1, height.toDouble()), _paint);
   }
 
-  static ui.Picture getSprite(String key, int width, int height, ui.Picture Function() generator) {
+  static _SpriteInfo getSprite(String key, int width, int height, _SpriteInfo Function() generator) {
     return _bitmapCache.putIfAbsent(key, () => generator());
   }
 
-  static ui.Picture getRickshawFrame(int frameIndex, {bool isTurbo = false, int leanDir = 0}) {
+  static _SpriteInfo getRickshawFrame(int frameIndex, {bool isTurbo = false, int leanDir = 0}) {
     final key = "rickshaw_f${frameIndex}_t${isTurbo}_l$leanDir";
-    return getSprite(key, 32, 40, _drawRickshaw(frameIndex, isTurbo, leanDir));
+    return getSprite(key, 32, 40, () => _drawRickshaw(frameIndex, isTurbo, leanDir));
   }
 
-  static ui.Picture _drawRickshaw(int frameIndex, bool isTurbo, int leanDir) {
+  static _SpriteInfo _drawRickshaw(int frameIndex, bool isTurbo, int leanDir) {
     return createPixelBitmap(32, 40, (canvas) {
       final ink = Palette.ink.value;
       final red = Palette.red.value;
@@ -97,12 +106,12 @@ class PixelSpriteRenderer {
     });
   }
 
-  static ui.Picture getObstacleSprite(String type, [int frame = 0]) {
+  static _SpriteInfo getObstacleSprite(String type, [int frame = 0]) {
     final key = "obs_${type}_$frame";
     return getSprite(key, 16, 16, () => _drawObstacle(type, frame));
   }
 
-  static ui.Picture _drawObstacle(String type, int frame) {
+  static _SpriteInfo _drawObstacle(String type, int frame) {
     return createPixelBitmap(16, 16, (canvas) {
       final ink = Palette.ink.value;
       final ash = Palette.ash.value;
@@ -146,11 +155,11 @@ class PixelSpriteRenderer {
     });
   }
 
-  static ui.Picture getCowSprite(int frame) {
+  static _SpriteInfo getCowSprite(int frame) {
     return getSprite("cow_$frame", 32, 24, () => _drawCow(frame));
   }
 
-  static ui.Picture _drawCow(int frame) {
+  static _SpriteInfo _drawCow(int frame) {
     return createPixelBitmap(32, 24, (canvas) {
       final ink = Palette.ink.value;
       final white = Palette.paper.value;
@@ -173,11 +182,11 @@ class PixelSpriteRenderer {
     });
   }
 
-  static ui.Picture getCoinSprite(int frame) {
+  static _SpriteInfo getCoinSprite(int frame) {
     return getSprite("coin_$frame", 8, 8, () => _drawCoin(frame));
   }
 
-  static ui.Picture _drawCoin(int frame) {
+  static _SpriteInfo _drawCoin(int frame) {
     return createPixelBitmap(8, 8, (canvas) {
       final ink = Palette.ink.value;
       final gold = Palette.gold.value;
@@ -194,12 +203,12 @@ class PixelSpriteRenderer {
     });
   }
 
-  static ui.Picture getPowerUpSprite(String type, int frame) {
+  static _SpriteInfo getPowerUpSprite(String type, int frame) {
     final key = "pup_${type}_$frame";
     return getSprite(key, 16, 16, () => _drawPowerUp(type, frame));
   }
 
-  static ui.Picture _drawPowerUp(String type, int frame) {
+  static _SpriteInfo _drawPowerUp(String type, int frame) {
     return createPixelBitmap(16, 16, (canvas) {
       final ink = Palette.ink.value;
       final gold = Palette.gold.value;
@@ -238,12 +247,12 @@ class PixelSpriteRenderer {
     });
   }
 
-  static ui.Picture getPassengerSprite(int typeIndex, int frame) {
+  static _SpriteInfo getPassengerSprite(int typeIndex, int frame) {
     final key = "pass_${typeIndex}_$frame";
     return getSprite(key, 16, 24, () => _drawPassenger(typeIndex, frame));
   }
 
-  static ui.Picture _drawPassenger(int typeIndex, int frame) {
+  static _SpriteInfo _drawPassenger(int typeIndex, int frame) {
     return createPixelBitmap(16, 24, (canvas) {
       final ink = Palette.ink.value;
       final skin = Palette.skinLight.value;
@@ -271,12 +280,12 @@ class PixelSpriteRenderer {
     });
   }
 
-  static ui.Picture getPedestrianSprite(int frame, bool isDodging) {
+  static _SpriteInfo getPedestrianSprite(int frame, bool isDodging) {
     final key = "ped_${frame}_$isDodging";
     return getSprite(key, 16, 24, () => _drawPedestrian(frame, isDodging));
   }
 
-  static ui.Picture _drawPedestrian(int frame, bool isDodging) {
+  static _SpriteInfo _drawPedestrian(int frame, bool isDodging) {
     return createPixelBitmap(16, 24, (canvas) {
       final ink = Palette.ink.value;
       final skin = Palette.skinMid.value;
@@ -311,7 +320,7 @@ class PixelSpriteRenderer {
         canvas.save();
         canvas.translate(curX.toDouble(), startY.toDouble());
         canvas.scale(scale.toDouble(), scale.toDouble());
-        canvas.drawPicture(glyph);
+        canvas.drawPicture(glyph.picture);
         canvas.restore();
         curX += (glyph.width + 1) * scale;
       } else {
@@ -333,31 +342,31 @@ class PixelSpriteRenderer {
     return sb.toString();
   }
 
-  static ui.Picture? _getGlyphBitmap(String ch, int colorArgb) {
+  static _SpriteInfo? _getGlyphBitmap(String ch, int colorArgb) {
     final key = "glyph_${ch}_$colorArgb";
     return _bitmapCache.putIfAbsent(key, () => _createGlyphBitmap(ch, colorArgb));
   }
 
-  static ui.Picture _createGlyphBitmap(String ch, int colorArgb) {
+  static _SpriteInfo _createGlyphBitmap(String ch, int colorArgb) {
     final glyphData = glyphMap[ch] ?? glyphMap['?'];
     if (glyphData == null) {
       return createPixelBitmap(6, 8, (canvas) {});
     }
 
     return createPixelBitmap(6, 8, (canvas) {
-      final paint = Paint()..color = Color(colorArgb)..isAntiAlias = false;
+      final paint = ui.Paint()..color = ui.Color(colorArgb)..isAntiAlias = false;
       for (var r = 0; r < 8; r++) {
         final line = glyphData[r];
         for (var c = 0; c < 5; c++) {
           if ((line & (1 << (5 - c))) != 0) {
-            canvas.drawRect(Rect.fromLTWH(c.toDouble(), r.toDouble(), 1, 1), paint);
+            canvas.drawRect(ui.Rect.fromLTWH(c.toDouble(), r.toDouble(), 1, 1), paint);
           }
         }
       }
     });
   }
 
-  static ui.Picture getBanglaTextSprite(String key) {
+  static _SpriteInfo getBanglaTextSprite(String key) {
     final cacheKey = "bn_text_$key";
     return _bitmapCache.putIfAbsent(cacheKey, () {
       switch (key) {
@@ -381,7 +390,7 @@ class PixelSpriteRenderer {
     });
   }
 
-  static ui.Picture _createBanglaWordBitmap(String textLabel, int width, int height, int textColorArgb, int bgColorArgb) {
+  static _SpriteInfo _createBanglaWordBitmap(String textLabel, int width, int height, int textColorArgb, int bgColorArgb) {
     return createPixelBitmap(width, height, (canvas) {
       drawPixelRect(canvas, 0, 0, width, height, bgColorArgb);
       drawPixelOutline(canvas, 0, 0, width, height, Palette.ink.value);

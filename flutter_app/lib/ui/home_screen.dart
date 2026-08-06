@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import '../core/palette.dart';
 import '../sprites/pixel_sprite_renderer.dart';
 
@@ -124,10 +125,11 @@ class _RickshawPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final image = PixelSpriteRenderer.getRickshawFrame(frameIndex);
-    final src = Rect.fromLTWH(0, 0, 32, 40);
-    final dst = Rect.fromLTWH(0, 0, size.width, size.height);
-    canvas.drawImageRect(image, src, dst, Paint());
+    final sprite = PixelSpriteRenderer.getRickshawFrame(frameIndex);
+    canvas.save();
+    canvas.scale(size.width / sprite.width, size.height / sprite.height);
+    canvas.drawPicture(sprite.picture);
+    canvas.restore();
   }
 
   @override
